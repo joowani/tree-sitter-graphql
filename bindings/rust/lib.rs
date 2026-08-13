@@ -5,6 +5,9 @@
 //!
 //! ```
 //! let code = r#"
+//! type Query {
+//!   hello: String
+//! }
 //! "#;
 //! let mut parser = tree_sitter::Parser::new();
 //! let language = tree_sitter_graphql::LANGUAGE;
