@@ -299,3 +299,49 @@ schema @deprecated {
     (root_operation_type_definition
       (operation_type)
       (named_type (name))))))))
+
+===
+String Values
+===
+
+"# not a comment"
+type Documented {
+  """
+  # not a comment
+  """
+  field: String
+}
+
+query Example {
+  field(message: "# looks like a comment, has 'quotes' and a second # too")
+  leading(text: "  # indented hash")
+  middle(text: "before # after")
+  block(text: """# hash in block string""")
+} # a real comment
+
+---
+(source_file (document
+  (definition (type_system_definition (type_definition (object_type_definition
+    (description (string_value))
+    (name)
+    (fields_definition (field_definition
+      (description (string_value))
+      (name)
+      (type (named_type (name)))))))))
+  (definition (executable_definition (operation_definition
+    (operation_type)
+    (name)
+    (selection_set
+      (selection (field
+        (name)
+        (arguments (argument (name) (value (string_value))))))
+      (selection (field
+        (name)
+        (arguments (argument (name) (value (string_value))))))
+      (selection (field
+        (name)
+        (arguments (argument (name) (value (string_value))))))
+      (selection (field
+        (name)
+        (arguments (argument (name) (value (string_value)))))))))))
+  (comment))
