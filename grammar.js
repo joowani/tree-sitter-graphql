@@ -278,9 +278,11 @@ module.exports = grammar({
       ),
     variable: ($) => seq("$", $.name),
     string_value: ($) =>
-      choice(
-        seq('"""', /([^"]|\n|""?[^"])*/, '"""'),
-        seq('"', /[^"\\\n]*/, '"')
+      token(
+        choice(
+          seq('"""', /([^"]|\n|""?[^"])*/, '"""'),
+          seq('"', /[^"\\\n]*/, '"')
+        )
       ),
     int_value: ($) => /-?(0|[1-9][0-9]*)/,
     float_value: ($) =>

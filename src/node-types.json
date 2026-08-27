@@ -1050,11 +1050,6 @@
     }
   },
   {
-    "type": "string_value",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "type",
     "named": true,
     "fields": {},
@@ -1391,14 +1386,6 @@
     "named": false
   },
   {
-    "type": "\"",
-    "named": false
-  },
-  {
-    "type": "\"\"\"",
-    "named": false
-  },
-  {
     "type": "$",
     "named": false
   },
@@ -1595,6 +1582,10 @@
   {
     "type": "schema",
     "named": false
+  },
+  {
+    "type": "string_value",
+    "named": true
   },
   {
     "type": "subscription",
