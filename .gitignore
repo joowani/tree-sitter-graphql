@@ -8,12 +8,20 @@ node_modules/
 
 # Swift artifacts
 .build/
+.swiftpm/
+Package.resolved
 
 # Go artifacts
 _obj/
 
+# Zig artifacts
+.zig-cache/
+zig-out/
+zig-pkg/
+
 # Python artifacts
 .venv/
+__pycache__/
 dist/
 *.egg-info
 *.whl
@@ -25,14 +33,17 @@ dist/
 *.dylib
 *.dll
 *.pc
+*.exp
+*.lib
 
 # Example dirs
 /examples/*/
 
-# Grammar volatiles
+# Grammar volatiles (`log.html` is written by `tree-sitter parse --debug-graph`)
 *.wasm
 *.obj
 *.o
+log.html
 
 # Archives
 *.tar.gz
@@ -42,9 +53,9 @@ dist/
 # Test
 test-*.gql
 
-# IDEs
+# Editor and OS files
+.DS_Store
 .idea/
 .vscode/
-
-# MacOS
-.DS_Store
+.claude/
+*.swp

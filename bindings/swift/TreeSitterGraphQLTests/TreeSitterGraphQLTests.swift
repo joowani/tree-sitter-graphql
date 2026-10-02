@@ -1,8 +1,8 @@
 import XCTest
 import SwiftTreeSitter
-import TreeSitterGraphql
+import TreeSitterGraphQL
 
-final class TreeSitterGraphqlTests: XCTestCase {
+final class TreeSitterGraphQLTests: XCTestCase {
     func testCanLoadGrammar() throws {
         let parser = Parser()
         let language = Language(language: tree_sitter_graphql())

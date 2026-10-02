@@ -10,6 +10,11 @@ import (
 func TestCanLoadGrammar(t *testing.T) {
 	language := tree_sitter.NewLanguage(tree_sitter_graphql.Language())
 	if language == nil {
-		t.Errorf("Error loading GraphQL grammar")
+		t.Fatal("Error loading GraphQL grammar")
+	}
+	parser := tree_sitter.NewParser()
+	defer parser.Close()
+	if err := parser.SetLanguage(language); err != nil {
+		t.Errorf("Error loading GraphQL grammar: %v", err)
 	}
 }

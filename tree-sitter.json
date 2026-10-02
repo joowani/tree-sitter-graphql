@@ -4,18 +4,19 @@
     {
       "name": "graphql",
       "camelcase": "GraphQL",
+      "title": "GraphQL",
       "scope": "source.graphql",
+      "path": ".",
       "file-types": [
         "gql",
         "graphqls",
         "graphql"
       ],
-      "injection-regex": "^graphql$",
-      "class-name": "TreeSitterGraphql"
+      "injection-regex": "^graphql$"
     }
   ],
   "metadata": {
-    "version": "0.1.0",
+    "version": "0.3.0",
     "license": "MIT",
     "description": "GraphQL grammar for tree-sitter",
     "authors": [
@@ -31,6 +32,7 @@
   "bindings": {
     "c": true,
     "go": true,
+    "java": false,
     "node": true,
     "python": true,
     "rust": true,

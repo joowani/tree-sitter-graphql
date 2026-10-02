@@ -20,19 +20,53 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Install Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24.20.0'
+          cache: npm
+
       - name: Install Rust toolchain
         run: |
           rustup toolchain install stable --profile minimal --no-self-update
           rustup default stable
 
+      - name: Install Go
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
+        with:
+          go-version: '1.26.0'
+          cache: true
+
+      - name: Install Zig
+        uses: mlugg/setup-zig@d1434d08867e3ee9daa34448df10607b98908d29 # v2.2.1
+        with:
+          version: '0.16.0'
+
       - name: Install Node dependencies
         run: npm ci
+
+      # The generated parser is committed, so regenerating it must not change anything.
+      - name: Verify generated parser
+        run: |
+          npx --no-install tree-sitter generate
+          git status --porcelain -- src
+          test -z "$(git status --porcelain -- src)"
 
       - name: Test grammar
         run: npx --no-install tree-sitter test
 
+      - name: Test Node binding
+        run: npm run test:node
+
+      # Without target flags, `cargo test` also runs the doc test in bindings/rust/lib.rs.
       - name: Test Rust binding
-        run: cargo test --locked --all-targets
+        run: cargo test --locked
+
+      - name: Test Go binding
+        run: go test -mod=readonly ./...
+
+      - name: Test Zig binding
+        run: zig build test -Dtest
 
       - name: Verify crate package
         run: cargo publish --locked --dry-run

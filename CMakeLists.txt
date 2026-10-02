@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(tree-sitter-graphql
-        VERSION "0.1.0"
+        VERSION "0.3.0"
         DESCRIPTION "GraphQL grammar for tree-sitter"
         HOMEPAGE_URL "https://github.com/joowani/tree-sitter-graphql"
         LANGUAGES C)
@@ -15,9 +15,21 @@ if(NOT ${TREE_SITTER_ABI_VERSION} MATCHES "^[0-9]+$")
     message(FATAL_ERROR "TREE_SITTER_ABI_VERSION must be an integer")
 endif()
 
-find_program(TREE_SITTER_CLI tree-sitter DOC "Tree-sitter CLI")
+include(GNUInstallDirs)
+
+find_program(TREE_SITTER_CLI tree-sitter DOC "Tree-sitter CLI" REQUIRED)
+
+add_custom_command(OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/src/grammar.json"
+                          "${CMAKE_CURRENT_SOURCE_DIR}/src/node-types.json"
+                   DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/grammar.js"
+                   COMMAND "${TREE_SITTER_CLI}" generate grammar.js --no-parser
+                   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+                   COMMENT "Generating grammar.json")
 
 add_custom_command(OUTPUT "${CMAKE_CURRENT_SOURCE_DIR}/src/parser.c"
+                   BYPRODUCTS "${CMAKE_CURRENT_SOURCE_DIR}/src/tree_sitter/parser.h"
+                              "${CMAKE_CURRENT_SOURCE_DIR}/src/tree_sitter/alloc.h"
+                              "${CMAKE_CURRENT_SOURCE_DIR}/src/tree_sitter/array.h"
                    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/grammar.json"
                    COMMAND "${TREE_SITTER_CLI}" generate src/grammar.json
                             --abi=${TREE_SITTER_ABI_VERSION}
@@ -47,13 +59,11 @@ set_target_properties(tree-sitter-graphql
 configure_file(bindings/c/tree-sitter-graphql.pc.in
                "${CMAKE_CURRENT_BINARY_DIR}/tree-sitter-graphql.pc" @ONLY)
 
-include(GNUInstallDirs)
-
 install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bindings/c/tree_sitter"
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
         FILES_MATCHING PATTERN "*.h")
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tree-sitter-graphql.pc"
-        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig")
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
 install(TARGETS tree-sitter-graphql
         LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 
